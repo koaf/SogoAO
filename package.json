@@ -1,0 +1,15 @@
+{
+  "name": "sogo-ao-blog",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run generate:posts && vite --host 0.0.0.0",
+    "build": "npm run generate:posts && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "generate:posts": "node scripts/generate-posts.mjs"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
