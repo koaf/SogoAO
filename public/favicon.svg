@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WABI-LAB favicon">
+  <rect width="64" height="64" rx="14" fill="#1f6b5d"/>
+  <path d="M9 17h7l4.1 21.4L25.4 17h6.1l5.3 21.4L40.9 17h7L40.4 47h-6.8l-5.2-20.2L23.2 47h-6.8L9 17Z" fill="#f7f5ef"/>
+  <path d="M44 17h7v23h11v7H44V17Z" fill="#f7f5ef"/>
+  <path d="M7 54h50" stroke="#b45239" stroke-width="5" stroke-linecap="round"/>
+</svg>

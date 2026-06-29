@@ -28,8 +28,8 @@ function renderShell(content: string) {
   app.innerHTML = `
     <header class="site-header">
       <a class="brand" href="#">
-        <span class="brand-mark">AO</span>
-        <span>総合型・学校推薦型選抜ナビ</span>
+        <span class="brand-mark">WL</span>
+        <span>WABI-LAB 年内受験対策</span>
       </a>
       <nav aria-label="主要ナビゲーション">
         <a href="#articles">記事一覧</a>
@@ -38,12 +38,13 @@ function renderShell(content: string) {
     </header>
     ${content}
     <footer class="site-footer">
-      <p>総合型選抜・学校推薦型選抜の準備を、書類・小論文・面接まで実践的に整理します。</p>
+      <p>WABI-LABが、総合型選抜・学校推薦型選抜の準備を実践的に整理します。</p>
     </footer>
   `;
 }
 
 function renderHome() {
+  document.title = "WABI-LAB 年内受験対策";
   const latest = posts[0];
   const categories = [...new Set(posts.flatMap((post) => post.categories))];
   const tags = [...new Set(posts.flatMap((post) => post.tags))].slice(0, 14);
@@ -52,8 +53,8 @@ function renderHome() {
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Admissions Strategy Journal</p>
-          <h1>総合型・学校推薦型選抜の準備を、迷わず進める。</h1>
+          <p class="eyebrow">WABI-LAB Admissions Journal</p>
+          <h1>年内受験の準備を、迷わず進める。</h1>
           <p class="lead">志望理由書、小論文、面接、保護者のサポートまで。年内入試で必要な考え方と具体策を、読みやすい記事にまとめています。</p>
           <div class="hero-actions">
             <a class="button primary" href="#articles">記事を読む</a>
@@ -142,7 +143,7 @@ function renderPostCard(post: Post) {
 }
 
 function renderPost(post: Post) {
-  document.title = `${post.title} | 総合型・学校推薦型選抜ナビ`;
+  document.title = `${post.title} | WABI-LAB 年内受験対策`;
   renderShell(`
     <main class="article-page">
       <a class="back-link" href="#articles">記事一覧へ戻る</a>
