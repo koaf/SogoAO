@@ -5,6 +5,7 @@ const root = process.cwd();
 const postsDir = path.join(root, "content", "posts");
 const outputDir = path.join(root, "src", "generated");
 const outputFile = path.join(outputDir, "posts.ts");
+const jsonOutputFile = path.join(outputDir, "posts.json");
 
 function parseFrontmatter(markdown) {
   const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
@@ -203,12 +204,13 @@ const posts = fs
   .filter((entry) => entry.isDirectory())
   .map((entry) => {
     const file = path.join(postsDir, entry.name, "index.md");
+    const slug = entry.name.replace(/\.md$/i, "");
     const markdown = fs.readFileSync(file, "utf8");
     const { data, body } = parseFrontmatter(markdown);
     const wordCount = textFromMarkdown(body).length;
 
     return {
-      slug: entry.name,
+      slug,
       title: data.title ?? entry.name,
       date: data.date ?? "",
       updated: data.lastmod ?? data.date ?? "",
@@ -228,5 +230,6 @@ fs.writeFileSync(
   outputFile,
   `export const posts = ${JSON.stringify(posts, null, 2)} as const;\n\nexport type Post = (typeof posts)[number];\n`,
 );
+fs.writeFileSync(jsonOutputFile, `${JSON.stringify(posts, null, 2)}\n`);
 
 console.log(`Generated ${posts.length} posts.`);

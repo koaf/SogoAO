@@ -17,3 +17,12 @@ npm run dev
 
 その後は `main` ブランチへ push すると、GitHub Actions が `npm run build` を実行し、GitHub Pages に自動公開します。
 
+## SEO
+
+ビルド時に `sitemap.xml`、`robots.txt`、各記事の静的HTMLを `dist` に生成します。
+
+このサイトの公開URLは `https://wabi-lab.blog/` です。GitHub Actions では `SITE_URL=https://wabi-lab.blog/`、`BASE_PATH=/` を使ってビルドします。
+
+GitHub Pages の Custom domain には `wabi-lab.blog` を設定してください。`public/CNAME` も同じドメインで管理しています。
+
+公開後は Google Search Console にサイトを登録し、`https://wabi-lab.blog/sitemap.xml` を送信してください。

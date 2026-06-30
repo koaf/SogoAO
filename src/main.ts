@@ -2,6 +2,8 @@ import { posts, type Post } from "./generated/posts";
 import "./styles.css";
 
 const app = document.querySelector<HTMLDivElement>("#app");
+const siteName = "WABI-LAB 年内受験対策";
+const basePath = normalizeBasePath(import.meta.env.BASE_URL);
 
 if (!app) {
   throw new Error("App root was not found.");
@@ -14,12 +16,31 @@ const formatDate = (date: string) =>
     day: "numeric",
   }).format(new Date(date));
 
+function normalizeBasePath(value: string) {
+  if (!value || value === "./") return "/";
+  return value.endsWith("/") ? value : `${value}/`;
+}
+
+function sitePath(path = "") {
+  const cleanPath = path.replace(/^\//, "");
+  return `${basePath}${cleanPath}`;
+}
+
+function currentPath() {
+  const pathname = window.location.pathname;
+  return pathname.startsWith(basePath)
+    ? pathname.slice(basePath.length - 1)
+    : pathname;
+}
+
 const route = () => {
-  const [, section, slug] = location.hash.split("/");
-  if (section === "posts" && slug) {
-    const post = posts.find((item) => item.slug === slug);
-    renderPost(post ?? posts[0]);
-    return;
+  const postMatch = currentPath().match(/^\/posts\/([^/]+)\/?$/);
+  if (postMatch) {
+    const post = posts.find((item) => item.slug === postMatch[1]);
+    if (post) {
+      renderPost(post);
+      return;
+    }
   }
   renderHome();
 };
@@ -27,13 +48,13 @@ const route = () => {
 function renderShell(content: string) {
   app.innerHTML = `
     <header class="site-header">
-      <a class="brand" href="#">
+      <a class="brand" href="${sitePath()}">
         <span class="brand-mark">WL</span>
-        <span>WABI-LAB 年内受験対策</span>
+        <span>${siteName}</span>
       </a>
       <nav aria-label="主要ナビゲーション">
-        <a href="#articles">記事一覧</a>
-        <a href="#topics">対策分野</a>
+        <a href="${sitePath()}#articles">記事一覧</a>
+        <a href="${sitePath()}#topics">対策分野</a>
       </nav>
     </header>
     ${content}
@@ -44,7 +65,12 @@ function renderShell(content: string) {
 }
 
 function renderHome() {
-  document.title = "WABI-LAB 年内受験対策";
+  document.title = siteName;
+  setMetaDescription(
+    "WABI-LAB 年内受験対策は、総合型選抜・学校推薦型選抜・志望理由書・小論文・面接対策をわかりやすく整理する受験ブログです。",
+  );
+  setCanonical(sitePath());
+
   const latest = posts[0];
   const categories = [...new Set(posts.flatMap((post) => post.categories))];
   const tags = [...new Set(posts.flatMap((post) => post.tags))].slice(0, 14);
@@ -57,8 +83,8 @@ function renderHome() {
           <h1>年内受験の準備を、迷わず進める。</h1>
           <p class="lead">志望理由書、小論文、面接、保護者のサポートまで。年内入試で必要な考え方と具体策を、読みやすい記事にまとめています。</p>
           <div class="hero-actions">
-            <a class="button primary" href="#articles">記事を読む</a>
-            ${latest ? `<a class="button secondary" href="#/posts/${latest.slug}">最新記事</a>` : ""}
+            <a class="button primary" href="${sitePath()}#articles">記事を読む</a>
+            ${latest ? `<a class="button secondary" href="${sitePath(`posts/${latest.slug}/`)}">最新記事</a>` : ""}
           </div>
         </div>
         <div class="hero-panel" aria-label="対策ロードマップ">
@@ -133,7 +159,7 @@ function renderPostCard(post: Post) {
   return `
     <article class="post-card">
       <div class="meta">${formatDate(post.date)} / ${post.readingMinutes}分</div>
-      <h3><a href="#/posts/${post.slug}">${post.title}</a></h3>
+      <h3><a href="${sitePath(`posts/${post.slug}/`)}">${post.title}</a></h3>
       <p>${post.summary}</p>
       <div class="chips">
         ${post.tags.slice(0, 4).map((tag) => `<span>${tag}</span>`).join("")}
@@ -143,10 +169,13 @@ function renderPostCard(post: Post) {
 }
 
 function renderPost(post: Post) {
-  document.title = `${post.title} | WABI-LAB 年内受験対策`;
+  document.title = `${post.title} | ${siteName}`;
+  setMetaDescription(post.description);
+  setCanonical(sitePath(`posts/${post.slug}/`));
+
   renderShell(`
     <main class="article-page">
-      <a class="back-link" href="#articles">記事一覧へ戻る</a>
+      <a class="back-link" href="${sitePath()}#articles">記事一覧へ戻る</a>
       <article class="article">
         <header class="article-header">
           <div class="meta">${formatDate(post.date)} / 更新 ${formatDate(post.updated)} / ${post.readingMinutes}分</div>
@@ -163,6 +192,17 @@ function renderPost(post: Post) {
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
-window.addEventListener("hashchange", route);
-route();
+function setMetaDescription(content: string) {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  if (meta) meta.content = content;
+}
 
+function setCanonical(path: string) {
+  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]') ?? document.createElement("link");
+  canonical.rel = "canonical";
+  canonical.href = new URL(path, window.location.origin).href;
+  if (!canonical.parentElement) document.head.appendChild(canonical);
+}
+
+window.addEventListener("popstate", route);
+route();

@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "npm run generate:posts && vite --host 0.0.0.0",
-    "build": "npm run generate:posts && vite build",
+    "build": "npm run generate:posts && vite build && npm run generate:seo",
     "preview": "vite preview --host 0.0.0.0",
-    "generate:posts": "node scripts/generate-posts.mjs"
+    "generate:posts": "node scripts/generate-posts.mjs",
+    "generate:seo": "node scripts/generate-seo.mjs"
   },
   "devDependencies": {
     "vite": "^7.0.0"
