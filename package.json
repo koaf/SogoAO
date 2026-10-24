@@ -8,7 +8,8 @@
     "build": "npm run generate:posts && vite build && npm run generate:seo",
     "preview": "vite preview --host 0.0.0.0",
     "generate:posts": "node scripts/generate-posts.mjs",
-    "generate:seo": "node scripts/generate-seo.mjs"
+    "generate:seo": "node scripts/generate-seo.mjs",
+    "check:seo": "node scripts/check-seo.mjs"
   },
   "devDependencies": {
     "vite": "^7.0.0"

@@ -34,7 +34,7 @@ jobs:
         env:
           SITE_URL: https://wabi-lab.blog/
           BASE_PATH: /
-        run: npm run build
+        run: npm run build && npm run check:seo
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
