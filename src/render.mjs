@@ -1,5 +1,12 @@
 export const siteName = "WABI-LAB 年内受験対策";
 export const siteDescription = "WABI-LAB 年内受験対策は、総合型選抜・学校推薦型選抜・志望理由書・小論文・面接対策をわかりやすく整理する受験ブログです。";
+export const privacyPage = {
+  title: "プライバシーポリシー",
+  description: "WABI-LAB 年内受験対策の閲覧に伴う情報の取扱い、Cookie、外部サービスについて説明します。",
+  pathname: "privacy/",
+  aliases: ["privacy-policy/"],
+  updated: "2026-10-25",
+};
 
 export function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;")
@@ -29,6 +36,7 @@ function renderShell(content, basePath) {
     ${content}
     <footer class="site-footer">
       <p>WABI-LABが、総合型選抜・学校推薦型選抜の準備を実践的に整理します。</p>
+      <p><a href="${sitePath(basePath, privacyPage.pathname)}">プライバシーポリシー</a></p>
     </footer>
   `;
 }
@@ -141,6 +149,41 @@ export function renderPost(post, basePath = "/") {
           </div>
         </header>
         <div class="article-body">${post.html}</div>
+      </article>
+    </main>
+  `, basePath);
+}
+
+export function renderPrivacy(basePath = "/") {
+  return renderShell(`
+    <main class="article-page">
+      <article class="article">
+        <header class="article-header">
+          <h1>${privacyPage.title}</h1>
+          <p>更新日：${formatDate(privacyPage.updated)}</p>
+        </header>
+        <div class="article-body">
+          <p>WABI-LAB 年内受験対策（以下「当サイト」）の閲覧に伴う情報の取扱いについて説明します。</p>
+
+          <h2>当サイトで入力する情報について</h2>
+          <p>当サイトは、総合型選抜・学校推薦型選抜などの受験情報を掲載するブログです。現在、サイト内には会員登録・コメント投稿・お問い合わせフォームを設けていません。</p>
+          <p>記事から案内しているアンケートは、外部のGoogleフォームで回答する形式です。当サイトのページ内で回答を送信する仕組みではありません。回答前に、各フォームに記載された質問項目、利用目的、公開の有無をご確認ください。</p>
+
+          <h2>配信サービスが記録するアクセス情報</h2>
+          <p>当サイトはGitHub Pagesを利用して配信しています。GitHubの公式説明によると、GitHub Pagesへのアクセス時には、セキュリティのために閲覧者のIPアドレスが記録・保存されます。GitHubへのログインの有無にかかわらず行われます。</p>
+          <p>詳細は、<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection" target="_blank" rel="noopener noreferrer">GitHub Pagesのデータ収集に関する説明</a>と、<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHubのプライバシーステートメント</a>をご確認ください。</p>
+
+          <h2>Cookie・アクセス解析・広告について</h2>
+          <p>現在、当サイトのページには、アクセス解析ツールや広告配信サービスを導入していません。また、当サイト独自のCookieの発行や、ブラウザーへの利用者情報の保存も行っていません。</p>
+          <p>リンク先の外部サービスでは、Cookie等が使われる場合があります。その取扱いは、各サービスのプライバシーポリシーや設定をご確認ください。</p>
+
+          <h2>外部サイト・アンケートの利用について</h2>
+          <p>当サイトから、大学の公式サイトやGoogleフォームなどへリンクしています。外部サイトに移動した後の情報の入力・送信については、移動先で表示される説明もご確認ください。</p>
+          <p>Googleのサービスにおけるデータの取扱いは、<a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener noreferrer">Googleのプライバシーポリシー</a>に記載されています。アンケートの回答内容の利用については、個々のフォームに記載された説明をご確認ください。</p>
+
+          <h2>このページの更新</h2>
+          <p>このページの内容を変更した際は、変更内容と更新日を掲載します。</p>
+        </div>
       </article>
     </main>
   `, basePath);

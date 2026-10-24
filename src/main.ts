@@ -14,12 +14,15 @@ if (import.meta.env.DEV) {
   const match = pathname.match(/^\/posts\/([^/]+)\/?$/);
   const post = match && posts.find((item) => item.slug === match[1]);
   const isHome = pathname === "/" || pathname === "/index.html";
+  const isPrivacy = [view.privacyPage.pathname, ...view.privacyPage.aliases]
+    .some((path) => pathname === `/${path}` || pathname === `/${path.slice(0, -1)}`);
 
   app.innerHTML = post
     ? view.renderPost(post, basePath)
-    : isHome ? view.renderHome(posts, basePath) : view.renderNotFound(basePath);
+    : isHome ? view.renderHome(posts, basePath)
+    : isPrivacy ? view.renderPrivacy(basePath) : view.renderNotFound(basePath);
   document.title = post ? `${post.title} | ${view.siteName}` : isHome
-    ? view.siteName : `ページが見つかりません | ${view.siteName}`;
+    ? view.siteName : `${isPrivacy ? view.privacyPage.title : "ページが見つかりません"} | ${view.siteName}`;
 
   if (location.hash === "#articles" || location.hash === "#topics") {
     document.querySelector(location.hash)?.scrollIntoView();

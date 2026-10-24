@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   escapeHtml, renderHome, renderPost, renderNotFound, siteName, siteDescription,
+  privacyPage, renderPrivacy,
 } from "../src/render.mjs";
 
 const root = process.cwd();
@@ -104,6 +105,11 @@ const urls = [
     lastmod: post.updated || post.date,
     priority: "0.8",
   })),
+  {
+    loc: absoluteUrl(privacyPage.pathname),
+    lastmod: privacyPage.updated,
+    priority: "0.3",
+  },
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -151,4 +157,17 @@ for (const post of posts) {
   }));
 }
 
-console.log(`Generated sitemap, robots.txt, a noindex 404, and full HTML for home and ${posts.length} posts.`);
+const privacyHtml = renderDocument({
+  title: `${privacyPage.title} | ${siteName}`,
+  description: privacyPage.description,
+  pathname: privacyPage.pathname,
+  content: renderPrivacy(basePath),
+});
+for (const pathname of [privacyPage.pathname, ...privacyPage.aliases]) {
+  const pageDir = path.join(distDir, pathname);
+  fs.mkdirSync(pageDir, { recursive: true });
+  // Alternative URLs show the policy and point to /privacy/ as canonical.
+  fs.writeFileSync(path.join(pageDir, "index.html"), privacyHtml);
+}
+
+console.log(`Generated sitemap, robots.txt, a noindex 404, privacy policy, and full HTML for home and ${posts.length} posts.`);
